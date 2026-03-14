@@ -4,6 +4,7 @@ from typing import Optional, List, Dict, Any, Callable
 
 import httpx
 from mcp.server.fastmcp import FastMCP, Context
+from mcp.server.transport_security import TransportSecuritySettings
 
 try:
     from mcp.server.dependencies import get_http_headers as _get_http_headers  # type: ignore
@@ -13,7 +14,11 @@ except Exception:  # pragma: no cover - optional dependency path
 logger = logging.getLogger(__name__)
 
 # Initialize MCP server
-mcp = FastMCP("exa-pool", streamable_http_path="/")
+mcp = FastMCP(
+    "exa-pool",
+    streamable_http_path="/",
+    transport_security=TransportSecuritySettings(enable_dns_rebinding_protection=False),
+)
 
 # HTTP client timeout settings
 TIMEOUT = httpx.Timeout(30.0, connect=5.0)
